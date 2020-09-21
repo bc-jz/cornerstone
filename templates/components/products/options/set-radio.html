@@ -29,6 +29,6 @@
                 data-default
             {{/if}}
             {{#if ../required}}required{{/if}}>
-        <label data-product-attribute-value="{{id}}" class="form-label" for="attribute_radio_{{../id}}_{{id}}">{{this.label}}</label>
+        <label data-product-attribute-value="{{id}}" class="form-label" for="attribute_radio_{{../id}}_{{id}}">{{this.label}}<span class="variant-predictive-price" data-product-attribute-id="{{../id}}" data-product-attribute-value="{{id}}"></span></label>
     {{/each}}
 </div>

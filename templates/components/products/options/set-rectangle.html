@@ -33,7 +33,7 @@
             {{/if}}
             {{#if ../required}}required{{/if}}>
         <label class="form-option" for="attribute_rectangle__{{../id}}_{{id}}" data-product-attribute-value="{{id}}">
-            <span class="form-option-variant">{{this.label}}</span>
+            <span class="form-option-variant">{{this.label}}<span class="variant-predictive-price" data-product-attribute-id="{{../id}}" data-product-attribute-value="{{id}}"></span></span>
         </label>
     {{/each}}
 </div>

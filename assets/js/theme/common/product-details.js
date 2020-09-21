@@ -664,6 +664,7 @@ export default class ProductDetails {
         const behavior = data.out_of_stock_behavior;
         const inStockIds = data.in_stock_attributes;
         const outOfStockMessage = ` (${data.out_of_stock_message})`;
+        const predictedPricing = data.other_prices
 
         this.showProductImage(data.image);
 
@@ -675,13 +676,42 @@ export default class ProductDetails {
             const $attribute = $(attribute);
             const attrId = parseInt($attribute.data('productAttributeValue'), 10);
 
-
             if (inStockIds.indexOf(attrId) !== -1) {
                 this.enableAttribute($attribute, behavior, outOfStockMessage);
             } else {
                 this.disableAttribute($attribute, behavior, outOfStockMessage);
             }
         });
+        
+        if (predictedPricing) {
+            $("[data-product-attribute]", this.$scope).each((i, attribute) => {
+                const attValId = $(attribute).children(":checked").attr("value");
+                $(".variant-predictive-price[data-product-attribute-value='" + attValId + "']").html("");
+            });
+        	
+        	predictedPricing.forEach((predictedPrice, i, a) => {
+        		const attributeId = predictedPrice.option_id;
+        		const attributeValueId = predictedPrice.value_id;
+        		const relativePrice = predictedPrice.relativePrice;
+        		
+        		const predictivePriceElement = $(".variant-predictive-price[data-product-attribute-value='" + attributeValueId + "']");
+        		
+        		if (predictivePriceElement) {
+        			if (relativePrice == 0) {
+        				console.log("clear predicted price");
+        				predictivePriceElement.html("");
+        			} else {
+        				if(relativePrice > 0) {
+        					predictivePriceElement.html(" (+ $" + relativePrice + ")");
+        				} else {
+        					predictivePriceElement.html(" (- $" + (relativePrice*-1) + ")");
+        				}
+        			}
+        		} else {
+        			console.log("failed to find matching element.");
+        		}
+        	});
+        }
     }
 
     disableAttribute($attribute, behavior, outOfStockMessage) {
